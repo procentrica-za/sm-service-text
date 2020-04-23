@@ -29,12 +29,30 @@ func (s *Server) handlesendtext() http.HandlerFunc {
 
 		response, err := http.Get("https://platform.clickatell.com/messages/http/send?apiKey=xc8lCrpgTq-tPUYv3e2sPA==&to=" + textmessage.Number + "&content=" + Message)
 
-		//convert struct back to JSON
-		js, err := ioutil.ReadAll(response.Body)
+		responseData, err := ioutil.ReadAll(response.Body)
 		if err != nil {
 			log.Fatal(err)
 		}
 
+		var responseObject MessageList
+		json.Unmarshal(responseData, &responseObject)
+
+		messageresult := MessageResult{}
+		if err == nil {
+			messageresult.MessageSent = true
+		} else {
+			messageresult.MessageSent = false
+		}
+
+		//convert struct back to JSON
+		js, jserr := json.Marshal(messageresult)
+
+		//error occured when trying to convert struct to a JSON object
+		if jserr != nil {
+			w.WriteHeader(500)
+			fmt.Fprintf(w, "Unable to create JSON object from DB result to send message")
+			return
+		}
 		//return back to Front-End user
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(200)
