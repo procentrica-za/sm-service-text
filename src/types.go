@@ -9,10 +9,6 @@ type SendText struct {
 	Message string `json:"message"`
 }
 
-type EmailResult struct {
-	Message string `json:"message"`
-}
-
 type MessageResponse struct {
 	MessageID        string `json:"apiMessageId"`
 	Accepted         bool   `json:"accepted"`
