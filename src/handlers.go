@@ -11,7 +11,7 @@ import (
 
 func (s *Server) handlesendtext() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Handle forgot password Has Been Called in the email service")
+		fmt.Println("Handle send text Has Been Called in the text message service")
 		textmessage := SendText{}
 
 		// convert received JSON payload into the declared struct with response from user manager
@@ -21,6 +21,12 @@ func (s *Server) handlesendtext() http.HandlerFunc {
 		if err != nil {
 			w.WriteHeader(500)
 			fmt.Fprintf(w, "Bad JSON provided to send text message")
+			return
+		}
+
+		if textmessage.Message == "" {
+			w.WriteHeader(500)
+			fmt.Fprintf(w, "Please send a JSON with a number and a message.")
 			return
 		}
 
