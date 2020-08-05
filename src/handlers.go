@@ -50,7 +50,7 @@ func (s *Server) handlesendtext() http.HandlerFunc {
 			messageresult.MessageSent = false
 		}
 
-		//convert struct back to JSON
+		//convert struct back to JSON.
 		js, jserr := json.Marshal(messageresult)
 
 		//error occured when trying to convert struct to a JSON object
